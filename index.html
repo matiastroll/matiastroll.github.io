@@ -1,334 +1,127 @@
 <!DOCTYPE html>
-<html lang="en-US">
-	<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta charset="utf-8" />
-		<title>
-		</title>
-		<style>
-			body { font-family:'Times New Roman'; font-size:12pt }
-			p { margin:0pt }
-@media (max-width: 900px) { 
-img { 
-   max-width: 100%;
-   height: auto;
-}
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matias la viborilla</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
 
-.table-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
+    canvas {
+      border: 2px solid #000;
+      background-color: #fff;
+    }
+  </style>
+</head>
+<body>
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+<canvas id="gameCanvas" width="400" height="400"></canvas>
 
-td, th {
-    padding: 8px;
-    text-align: left;
-    border: 1px solid #ddd;
-}
-}	
+<script>
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const box = 20;
 
+  let snake = [];
+  snake[0] = {
+    x: 9 * box,
+    y: 10 * box
+  };
 
-		</style>
-	</head>
-	<body>
-			<p>
-				&lt;!DOCTYPE html&gt;
-			</p>
-			<p>
-				&lt;html lang="es"&gt;
-			</p>
-			<p>
-				&lt;head&gt;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0; &lt;meta charset="UTF-8"&gt;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0; &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0; &lt;title&gt;Juego de la Viborita&lt;/title&gt;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0; &lt;style&gt;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; body {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; display: flex;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; justify-content: center;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; align-items: center;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; height: 100vh;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; background-color: #f0f0f0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; }
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; canvas {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; border: 1px solid #000;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; background-color: #fff;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; }
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0; &lt;/style&gt;
-			</p>
-			<p>
-				&lt;/head&gt;
-			</p>
-			<p>
-				&lt;body&gt;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0; &lt;canvas id="snakeGame" width="400" height="400"&gt;&lt;/canvas&gt;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0; &lt;script&gt;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; const canvas = document.getElementById('snakeGame');
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; const ctx = canvas.getContext('2d');
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; const box = 20;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; let snake = [{ x: box * 5, y: box * 5 }];
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; let direction = 'RIGHT';
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; let food = {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; x: Math.floor(Math.random() * 20) * box,
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; y: Math.floor(Math.random() * 20) * box
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; };
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; let score = 0;
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; document.addEventListener('keydown', changeDirection);
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; function changeDirection(event) {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; if (event.keyCode === 37 &amp;&amp; direction !== 'RIGHT') direction = 'LEFT';
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; else if (event.keyCode === 38 &amp;&amp; direction !== 'DOWN') direction = 'UP';
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; else if (event.keyCode === 39 &amp;&amp; direction !== 'LEFT') direction = 'RIGHT';
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; else if (event.keyCode === 40 &amp;&amp; direction !== 'UP') direction = 'DOWN';
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; }
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; function collision(head, array) {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; for (let i = 0; i &lt; array.length; i++) {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; if (head.x === array[i].x &amp;&amp; head.y === array[i].y) {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; return true;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; }
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; }
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; return false;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; }
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; function draw() {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; ctx.clearRect(0, 0, canvas.width, canvas.height);
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; for (let i = 0; i &lt; snake.length; i++) {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; ctx.fillStyle = (i === 0) ? 'green' : 'lightgreen';
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; ctx.fillRect(snake[i].x, snake[i].y, box, box);
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; ctx.strokeStyle = 'darkgreen';
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; ctx.strokeRect(snake[i].x, snake[i].y, box, box);
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; }
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; ctx.fillStyle = 'red';
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; ctx.fillRect(food.x, food.y, box, box);
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; let snakeX = snake[0].x;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; let snakeY = snake[0].y;
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; if (direction === 'LEFT') snakeX -= box;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; if (direction === 'UP') snakeY -= box;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; if (direction === 'RIGHT') snakeX += box;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; if (direction === 'DOWN') snakeY += box;
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; if (snakeX === food.x &amp;&amp; snakeY === food.y) {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; score++;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; food = {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; x: Math.floor(Math.random() * 20) * box,
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; y: Math.floor(Math.random() * 20) * box
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; };
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; } else {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; snake.pop();
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; }
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; let newHead = { x: snakeX, y: snakeY };
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; if (snakeX &lt; 0 || snakeY &lt; 0 || snakeX &gt;= canvas.width || snakeY &gt;= canvas.height || collision(newHead, snake)) {
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; clearInterval(game);
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; alert('Game Over! Tu puntuación: ' + score);
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; }
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; snake.unshift(newHead);
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; }
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; let game = setInterval(draw, 100);
-			</p>
-			<p>
-				&#xa0;&#xa0;&#xa0; &lt;/script&gt;
-			</p>
-			<p>
-				&lt;/body&gt;
-			</p>
-			<p>
-				&lt;/html&gt;
-			</p>
-			<p>
-				&#xa0;
-			</p>
-	<p style="bottom: 10px; right: 10px; position: absolute;"><a href="https://wordtohtml.net" target="_blank" style="font-size:11px; color: #d0d0d0">Converted to HTML with WordToHTML.net</a></p>
+  let food = {
+    x: Math.floor(Math.random() * 19 + 1) * box,
+    y: Math.floor(Math.random() * 19 + 1) * box
+  };
+
+  let score = 0;
+  let direction;
+
+  // Control de dirección
+  document.addEventListener('keydown', setDirection);
+
+  function setDirection(event) {
+    if (event.keyCode == 37 && direction != "RIGHT") {
+      direction = "LEFT";
+    } else if (event.keyCode == 38 && direction != "DOWN") {
+      direction = "UP";
+    } else if (event.keyCode == 39 && direction != "LEFT") {
+      direction = "RIGHT";
+    } else if (event.keyCode == 40 && direction != "UP") {
+      direction = "DOWN";
+    }
+  }
+
+  function collision(head, array) {
+    for (let i = 0; i < array.length; i++) {
+      if (head.x == array[i].x && head.y == array[i].y) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Dibuja la serpiente
+    for (let i = 0; i < snake.length; i++) {
+      ctx.fillStyle = (i === 0) ? "#00FF00" : "#009900";
+      ctx.fillRect(snake[i].x, snake[i].y, box, box);
+    }
+
+    // Dibuja la comida
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(food.x, food.y, box, box);
+
+    // Posición anterior de la cabeza de la serpiente
+    let snakeX = snake[0].x;
+    let snakeY = snake[0].y;
+
+    // Actualiza la dirección
+    if (direction == "LEFT") snakeX -= box;
+    if (direction == "UP") snakeY -= box;
+    if (direction == "RIGHT") snakeX += box;
+    if (direction == "DOWN") snakeY += box;
+
+    // Si la serpiente come la comida
+    if (snakeX == food.x && snakeY == food.y) {
+      score++;
+      food = {
+        x: Math.floor(Math.random() * 19 + 1) * box,
+        y: Math.floor(Math.random() * 19 + 1) * box
+      };
+    } else {
+      snake.pop(); // Elimina la cola
+    }
+
+    // Nueva cabeza
+    let newHead = {
+      x: snakeX,
+      y: snakeY
+    };
+
+    // Fin del juego: colisión con las paredes o con el cuerpo
+    if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
+      clearInterval(game);
+    }
+
+    snake.unshift(newHead); // Añade nueva cabeza al inicio
+
+    // Mostrar puntuación
+    ctx.fillStyle = "#000";
+    ctx.font = "20px Arial";
+    ctx.fillText("Puntuación: " + score, 10, canvas.height - 10);
+  }
+
+  let game = setInterval(draw, 100);
+</script>
+
 </body>
 </html>
